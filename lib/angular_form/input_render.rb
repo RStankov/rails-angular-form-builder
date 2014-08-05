@@ -1,0 +1,7 @@
+require_relative 'input_render/base_render'
+require_relative 'input_render/basic_render'
+require_relative 'input_render/boolean_render'
+require_relative 'input_render/email_render'
+require_relative 'input_render/password_render'
+require_relative 'input_render/string_render'
+require_relative 'input_render/text_render'

@@ -5,6 +5,11 @@ if ENV['TRAVIS']
   Coveralls.wear!
 end
 
+require 'action_view'
+require 'action_controller'
+require 'rspec/rails'
+require 'rspec-html-matchers'
+
 require 'angular_form'
 
 RSpec.configure do |config|

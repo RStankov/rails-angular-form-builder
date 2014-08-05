@@ -1,7 +1,7 @@
 AngularFormBuilder
 ==========================
 
-Working with angular is cool, but in some areas there are some rough edges. Forms are one of those. Especially if one is used to work with tools like [simple_form](http://github.com/plataformatec/simple_form). So for several projects now I'm slowing building up [Rails](http://rubyonrails.org/) FormBuilder with similar API to [simple_form](http://github/com/plataformatec/simple_form). 
+Working with angular is cool, but in some areas there are some rough edges. Forms are one of those places. Especially if one is used to work with tools like [simple_form](http://github.com/plataformatec/simple_form). For several projects, now I'm slowly building up a [Rails](http://rubyonrails.org/) FormBuilder with similar API to [simple_form](http://github/com/plataformatec/simple_form).
 
 **Project is not production ready still** (even the name isn't final yet).
 

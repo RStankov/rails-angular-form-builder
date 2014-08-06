@@ -1,3 +1,7 @@
+[![Code Climate](https://codeclimate.com/github/RStankov/rails-angular-form-builder.png)](https://codeclimate.com/github/RStankov/rails-angular-form-builder)
+[![Build Status](https://secure.travis-ci.org/RStankov/rails-angular-form-builder.png)](http://travis-ci.org/RStankov/rails-angular-form-builder)
+[![Code coverage](https://coveralls.io/repos/RStankov/rails-angular-form-builder/badge.png?branch=master)](https://coveralls.io/r/RStankov/rails-angular-form-builder)
+
 AngularFormBuilder
 ==========================
 

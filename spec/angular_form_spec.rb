@@ -95,4 +95,21 @@ describe AngularForm, type: :helper do
       expect(builder.saved_message).to have_tag :span, class: 'saved', 'ng-show' => 'saved', text: 'Saved!'
     end
   end
+
+  class HtmlHelper
+    include ActionView::Helpers
+
+    def output_buffer=(content)
+      @content = content
+    end
+
+    def output_buffer
+      @content
+    end
+  end
+
+  def helper
+    @helper ||= HtmlHelper.new
+  end
 end
+

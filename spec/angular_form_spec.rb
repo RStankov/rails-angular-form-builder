@@ -1,9 +1,25 @@
 require 'spec_helper'
 
-describe AngularForm, type: :helper do
-  let(:builder) { AngularForm::Builder.new :product, helper }
+describe AngularForm do
+  let(:builder) { AngularForm::Builder.new :product, helper, AngularForm.default_configuration }
 
   describe "#input" do
+    specify "class names are globally configured" do
+      configuration = {
+        wrapper_class:  'form-group',
+        control_class:  'form-control',
+        label_class:    'control-label',
+        hint_class:     'help-block',
+      }
+
+      input_html = AngularForm::Builder.new(:product, helper, configuration).input(:name, hint: 'text')
+
+      expect(input_html).to have_selector 'div.form-group'
+      expect(input_html).to have_selector 'input.form-control'
+      expect(input_html).to have_selector 'label.control-label'
+      expect(input_html).to have_selector 'p.help-block'
+    end
+
     context "options" do
       specify "(default)" do
         expect(builder.input(:name)).to have_tag :div, with: {class: 'input string'} do
@@ -21,11 +37,53 @@ describe AngularForm, type: :helper do
         end
       end
 
-      specify "label" do
-        expect(builder.input(:name, label: 'LABEL TEXT')).to have_tag :div, with: {class: 'input string'} do
-          with_tag :label, for: 'product_name', text: 'LABEL TEXT:'
-          with_tag :input, type: 'text', class: 'control', id: 'product_name', 'ng-model' => 'product.name'
-          with_tag :label, for: 'product_name', class: 'error', text: '{{product.errors.name[0]}}'
+      describe "label" do
+        it "renders label when is specified" do
+          expect(builder.input(:name, label: 'LABEL TEXT')).to have_tag :div, with: {class: 'input string'} do
+            with_tag :label, for: 'product_name', text: 'LABEL TEXT:'
+            with_tag :input, type: 'text', class: 'control', id: 'product_name', 'ng-model' => 'product.name'
+            with_tag :label, for: 'product_name', class: 'error', text: '{{product.errors.name[0]}}'
+          end
+        end
+
+        it "renders label as humanized attribute when not specified" do
+          expect(builder.input(:name)).to have_tag :label, for: 'product_name', text: 'Name:'
+        end
+
+        it "doesn't render label when label is 'false'" do
+          expect(builder.input(:name, label: false)).not_to have_tag :label, for: 'product_name', text: 'Name:'
+        end
+      end
+
+      describe "hint" do
+        it "renders hint when hint is specified" do
+          expect(builder.input(:name, hint: 'HINT')).to have_tag :p, class: 'hint', text: 'HINT'
+        end
+
+        it "doesn't render hint when hint isn't specified (default)" do
+          expect(builder.input(:name, hint: false)).not_to have_tag :p, class: 'hint'
+        end
+      end
+
+      describe "control_html" do
+        it "adds html attribute to the input tag" do
+          expect(builder.input(:name, control_html: {'ng-click' => 'method()'})).to have_selector %Q(input[ng-click="method()"])
+        end
+
+        it "adds up css classes" do
+          expect(builder.input(:name, control_html: {class: 'custom'})).to have_selector %Q(input.control.custom)
+        end
+      end
+
+      describe "label_class" do
+        it "adds additional label class" do
+          expect(builder.input(:name, label_class: 'custom')).to have_selector %Q(label.custom)
+        end
+      end
+
+      describe "ng-options" do
+        it "adds ng-options to selects" do
+          expect(builder.input(:size, as: :select, 'ng-options' => 'size for size in sizes')).to have_selector %Q(select[ng-options="size for size in sizes"])
         end
       end
     end
@@ -63,10 +121,26 @@ describe AngularForm, type: :helper do
         end
       end
 
+      specify "as file" do
+        expect(builder.input(:picture, as: :file)).to have_tag :div, with: {class: 'input file'} do
+          with_tag :label, for: 'product_picture', text: 'Picture:'
+          with_tag :input, type: 'file', class: 'control', id: 'product_picture', 'ng-model' => 'product.picture'
+          with_tag :label, for: 'product_picture', class: 'error', text: '{{product.errors.picture[0]}}'
+        end
+      end
+
       specify "as boolean" do
         expect(builder.input(:promoted, as: :boolean)).to have_tag :div, with: {class: 'input boolean'} do
           with_tag :label, for: 'product_promoted', text: 'Promoted'
           with_tag :input, type: 'checkbox', id: 'product_promoted', 'ng-model' => 'product.name'
+        end
+      end
+
+      specify "as select" do
+        expect(builder.input(:size, as: :select)).to have_tag :div, with: {class: 'input select'} do
+          with_tag :label, for: 'product_size', text: 'Size:'
+          with_tag :select, class: 'control', id: 'product_size', 'ng-model' => 'product.size'
+          with_tag :label, for: 'product_size', class: 'error', text: '{{product.errors.size[0]}}'
         end
       end
 
@@ -87,6 +161,12 @@ describe AngularForm, type: :helper do
 
     it "accepts html tag options" do
       expect(builder.submit('Change', class: 'bnt-danger')).to have_tag :input, class: 'btn-danger'
+    end
+
+    it "class names are globally configured" do
+      builder = AngularForm::Builder.new :product, helper, submit_class: 'btn btn-primary'
+
+      expect(builder.submit('Change')).to have_selector 'input.btn.btn-primary'
     end
   end
 

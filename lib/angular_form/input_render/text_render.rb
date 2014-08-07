@@ -1,8 +1,8 @@
 module AngularForm
   module InputRender
-    class TextRender < BasicRender
-      def input_helper_method
-        :text_area
+    class TextRender < StringRender
+      def render_input
+        @view.text_area model_name, attribute, input_html_attributes
       end
     end
   end

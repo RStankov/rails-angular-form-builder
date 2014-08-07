@@ -3,11 +3,12 @@ module AngularForm
     class BaseRender
       attr_reader :model_name, :attribute, :options
 
-      def initialize(model_name, attribute, options, view)
-        @model_name = model_name
-        @attribute  = attribute
-        @options    = options
-        @view       = view
+      def initialize(model_name, attribute, options, view, configuration)
+        @model_name    = model_name
+        @attribute     = attribute
+        @options       = options
+        @view          = view
+        @configuration = configuration
       end
 
       def render_input
@@ -19,15 +20,19 @@ module AngularForm
       end
 
       def render_label
-        @view.label_tag field_name, label_text
+        @view.label_tag field_name, label_text, class: "#{@configuration[:label_class]} #{@options[:label_class]}".strip if options[:label] != false
       end
 
       def render_wrapper(&block)
-        @view.content_tag :div, class: "input #{options[:as]}", 'ng-class' => "{'has-error': #{error_binding}}", &block
+        @view.content_tag :div, class: "#{@configuration[:wrapper_class]} #{options[:as]}", 'ng-class' => "{'has-error': #{error_binding}}", &block
+      end
+
+      def render_hint
+        @view.content_tag :p, options[:hint], class: @configuration[:hint_class] if options[:hint]
       end
 
       def render_components
-        render_label + render_input + render_error_message
+        [render_label, render_input, render_error_message, render_hint].compact.join.html_safe
       end
 
       def render

@@ -27,8 +27,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec', '3.0'
   spec.add_development_dependency 'rspec-mocks', '3.0'
-  spec.add_development_dependency 'rspec-rails', '3.0'
   spec.add_development_dependency 'rspec-html-matchers', '0.6.1'
+  spec.add_development_dependency 'capybara', '2.4.1'
   spec.add_development_dependency 'coveralls'
 end
 

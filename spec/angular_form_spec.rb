@@ -170,7 +170,7 @@ describe AngularForm do
     end
   end
 
-  describe "#saved_messsage" do
+  describe "#saved_message" do
     it "renders simple span with simple message" do
       expect(builder.saved_message).to have_tag :span, class: 'saved', 'ng-show' => 'saved', text: 'Saved!'
     end
